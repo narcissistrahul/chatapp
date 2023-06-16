@@ -1,0 +1,10 @@
+<div class="container">
+  <h1>Chat App</h1>
+  <ul class="message-list">
+    <li *ngFor="let msg of messages">{{ msg.sender }}: {{ msg.content }}</li>
+  </ul>
+  <div class="message-input">
+    <input [(ngModel)]="message" placeholder="Type your message..." (keyup.enter)="sendMessage()" />
+    <button (click)="sendMessage()">Send</button>
+  </div>
+</div>

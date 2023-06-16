@@ -1,0 +1,67 @@
+body {
+    font-family: 'Mulish', sans-serif;
+  }
+  
+.container {
+    width: 400px;
+    height: 500px;
+    background: #f8f8f8;
+    box-shadow: 10px 10px 20px #dcdcdc, -10px -10px 20px #ffffff;
+    border-radius: 20px;
+    padding: 20px;
+  }
+  
+  .message-list {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+    height: 380px;
+    overflow-y: auto;
+  }
+  
+  .message-list li {
+    padding: 10px;
+    background: #f8f8f8;
+    box-shadow: 5px 5px 10px #dcdcdc, -5px -5px 10px #ffffff;
+    margin-bottom: 10px;
+    border-radius: 10px;
+  }
+  
+  .message-list li:last-child {
+    margin-bottom: 0;
+  }
+  
+  .message-input {
+    display: flex;
+    margin-top: 10px;
+  }
+  
+  .message-input input {
+    flex: 1;
+    padding: 8px;
+    border-radius: 10px;
+    border: none;
+    background: #f8f8f8;
+    box-shadow: inset 5px 5px 10px #dcdcdc, inset -5px -5px 10px #ffffff;
+  }
+  
+  .message-input input:focus {
+    outline: none;
+    box-shadow: inset 4px 4px 6px #c7e4ff, inset -4px -4px 6px #ffffff;
+  }
+  
+  .message-input button {
+    margin-left: 10px;
+    padding: 8px 12px;
+    border-radius: 10px;
+    background: #6da1ff;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    box-shadow: 5px 5px 10px #b2d0ff, -5px -5px 10px #ffffff;
+  }
+  
+  .message-input button:hover {
+    background: #5c8ed6;
+  }
+  
