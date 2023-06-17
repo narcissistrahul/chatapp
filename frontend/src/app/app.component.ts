@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
 import { io } from 'socket.io-client';
 
 @Component({
@@ -7,15 +8,30 @@ import { io } from 'socket.io-client';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
+  chatMessages: string[] = [];
   private socket = io('http://localhost:3000');
   message = '';
   messages: { sender: string, content: string }[] = [];
 
-  constructor() {
+  constructor(private http: HttpClient) {
     // Listen for chat messages
     this.socket.on('chat message', (data: { sender: string, content: string }) => {
       this.messages.push(data);
     });
+  }
+  ngonInit(){
+    this.fetchChatMessages();
+  }
+
+  fetchChatMessages() {
+    this.http.get<string[]>('http://localhost:3000/messages').subscribe(
+      (messages) => {
+        this.chatMessages = messages;
+      },
+      (error) => {
+        console.log('Error fetching chat messages:', error);
+      }
+    );
   }
 
   sendMessage() {
@@ -29,5 +45,20 @@ export class AppComponent {
 
     // Clear the input field
     this.message = '';
+  }
+
+
+  downloadChatMessages() {
+    if (this.messages.length === 0) {
+      return;
+    }
+    const chatContent = this.messages.map((message) => `${message.sender}: ${message.content}`).join('\n');
+    const element = document.createElement('a');
+    const file = new Blob([chatContent], { type: 'text/plain;charset=utf-8' });
+    element.href = URL.createObjectURL(file);
+    element.download = 'chat.txt';
+    document.body.appendChild(element);
+    element.click();
+    document.body.removeChild(element);
   }
 }

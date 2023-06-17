@@ -1,9 +1,11 @@
 const express = require('express');
+var cors = require('cors');
 const http = require('http');
 const socketIO = require('socket.io');
 const mongoose = require('mongoose');
 
 const app = express();
+app.use(cors());
 
 const server = http.createServer(app);
 
@@ -66,6 +68,19 @@ io.on('connection', (socket) => {
   socket.on('disconnect', () => {
     console.log('User disconnected');
   });
+});
+
+// Create an endpoint for fetching chat messages
+app.get('/messages', async (req, res) => {
+  try {
+    // Fetch chat messages from the database
+    const messages = await Message.find({}, 'content');
+    const messageContent = messages.map((message) => message.content);
+    res.json(messageContent);
+  } catch (error) {
+    console.error('Error fetching chat messages:', error);
+    res.status(500).send('Error fetching chat messages');
+  }
 });
 
 // Start the server

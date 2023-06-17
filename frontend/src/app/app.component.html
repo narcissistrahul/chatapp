@@ -6,5 +6,6 @@
   <div class="message-input">
     <input [(ngModel)]="message" placeholder="Type your message..." (keyup.enter)="sendMessage()" />
     <button (click)="sendMessage()">Send</button>
+    <button (click)="downloadChatMessages()">Download Chat</button>
   </div>
 </div>
