@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { io } from 'socket.io-client';
+import { io, Socket } from 'socket.io-client';
 
 @Component({
   selector: 'app-root',
@@ -9,17 +9,26 @@ import { io } from 'socket.io-client';
 })
 export class AppComponent {
   chatMessages: string[] = [];
-  private socket = io('http://localhost:3000');
+  private socket: Socket;
+  private userIdentifier: string; // User identifier/token
   message = '';
   messages: { sender: string, content: string }[] = [];
 
   constructor(private http: HttpClient) {
+    // Generate a random user identifier/token
+    this.userIdentifier = this.generateUserIdentifier();
+
+    // Establish Socket.IO connection with user identifier as a query parameter
+    this.socket = io('http://localhost:3000', {
+      query: { userIdentifier: this.userIdentifier }
+    });
+
     // Listen for chat messages
     this.socket.on('chat message', (data: { sender: string, content: string }) => {
       this.messages.push(data);
     });
   }
-  ngonInit(){
+  ngonInit() {
     this.fetchChatMessages();
   }
 
@@ -36,7 +45,7 @@ export class AppComponent {
 
   sendMessage() {
     const data = {
-      sender: 'User',
+      sender: this.userIdentifier, // Include user identifier as the sender
       content: this.message
     };
 
@@ -49,13 +58,15 @@ export class AppComponent {
 
 
   downloadChatMessages() {
-    this.http.get<any[]>('http://localhost:3000/messages/all').subscribe(
+    this.http.get<any[]>('http://localhost:3000/messages').subscribe(
       (messages) => {
         if (messages.length === 0) {
           return;
         }
-  
-        const chatContent = messages.map((message) => `${message.sender}: ${message.content}`).join('\n');
+
+        const chatContent = messages
+          .map((message) => `${message._id} => ${message.sender}: ${message.content}`)
+          .join('\n');
         const element = document.createElement('a');
         const file = new Blob([chatContent], { type: 'text/plain;charset=utf-8' });
         element.href = URL.createObjectURL(file);
@@ -68,5 +79,14 @@ export class AppComponent {
         console.log('Error fetching chat messages:', error);
       }
     );
+  }
+  private generateUserIdentifier(): string {
+    // Generate a random string for user identifier
+    const characters = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+    let userIdentifier = '';
+    for (let i = 0; i < 10; i++) {
+      userIdentifier += characters.charAt(Math.floor(Math.random() * characters.length));
+    }
+    return userIdentifier;
   }
 }

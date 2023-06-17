@@ -74,9 +74,8 @@ io.on('connection', (socket) => {
 app.get('/messages', async (req, res) => {
   try {
     // Fetch chat messages from the database
-    const messages = await Message.find({}, 'content');
-    const messageContent = messages.map((message) => message.content);
-    res.json(messageContent);
+    const messages = await Message.find({}, 'sender content');
+     res.json(messages);
   } catch (error) {
     console.error('Error fetching chat messages:', error);
     res.status(500).send('Error fetching chat messages');
