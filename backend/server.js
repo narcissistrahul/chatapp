@@ -83,6 +83,18 @@ app.get('/messages', async (req, res) => {
   }
 });
 
+// Create an endpoint for fetching all chat messages
+app.get('/messages/all', async (req, res) => {
+  try {
+    // Fetch all chat messages from the database
+    const messages = await Message.find({}, 'sender content');
+    res.json(messages);
+  } catch (error) {
+    console.error('Error fetching chat messages:', error);
+    res.status(500).send('Error fetching chat messages');
+  }
+});
+
 // Start the server
 server.listen(3000, () => {
   console.log('Server listening on http://localhost:3000');

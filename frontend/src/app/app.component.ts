@@ -49,16 +49,24 @@ export class AppComponent {
 
 
   downloadChatMessages() {
-    if (this.messages.length === 0) {
-      return;
-    }
-    const chatContent = this.messages.map((message) => `${message.sender}: ${message.content}`).join('\n');
-    const element = document.createElement('a');
-    const file = new Blob([chatContent], { type: 'text/plain;charset=utf-8' });
-    element.href = URL.createObjectURL(file);
-    element.download = 'chat.txt';
-    document.body.appendChild(element);
-    element.click();
-    document.body.removeChild(element);
+    this.http.get<any[]>('http://localhost:3000/messages/all').subscribe(
+      (messages) => {
+        if (messages.length === 0) {
+          return;
+        }
+  
+        const chatContent = messages.map((message) => `${message.sender}: ${message.content}`).join('\n');
+        const element = document.createElement('a');
+        const file = new Blob([chatContent], { type: 'text/plain;charset=utf-8' });
+        element.href = URL.createObjectURL(file);
+        element.download = 'chat.txt';
+        document.body.appendChild(element);
+        element.click();
+        document.body.removeChild(element);
+      },
+      (error) => {
+        console.log('Error fetching chat messages:', error);
+      }
+    );
   }
 }
