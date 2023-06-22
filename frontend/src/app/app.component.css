@@ -1,6 +1,6 @@
 .container {
     width: 400px;
-    height: 500px;
+    height: auto;
     background: #f8f8f8;
     box-shadow: 10px 10px 20px #dcdcdc, -10px -10px 20px #ffffff;
     border-radius: 20px;
@@ -41,6 +41,15 @@
     box-shadow: inset 5px 5px 10px #dcdcdc, inset -5px -5px 10px #ffffff;
   }
   
+  .message-input input:disabled {
+    flex: 1;
+    padding: 8px;
+    border-radius: 10px;
+    border: none;
+    background: #ccc;
+    box-shadow: inset 5px 5px 10px #dcdcdc, inset -5px -5px 10px #ffffff;
+  }
+  
   .message-input input:focus {
     outline: none;
     box-shadow: inset 4px 4px 6px #c7e4ff, inset -4px -4px 6px #ffffff;
@@ -61,3 +70,21 @@
     background: #5c8ed6;
   }
   
+  .userName {
+    display: flex;
+    margin-top: 10px;
+  }
+  
+  .userName input {
+    flex: 1;
+    padding: 8px;
+    border-radius: 10px;
+    border: none;
+    background: #f8f8f8;
+    box-shadow: inset 5px 5px 10px #dcdcdc, inset -5px -5px 10px #ffffff;
+  }
+  
+  .userName input:focus {
+    outline: none;
+    box-shadow: inset 4px 4px 6px #c7e4ff, inset -4px -4px 6px #ffffff;
+  }

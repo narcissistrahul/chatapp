@@ -8,15 +8,18 @@ import { io, Socket } from 'socket.io-client';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
+  title = "frontend";
   chatMessages: string[] = [];
   private socket: Socket;
-  private userIdentifier: string; // User identifier/token
+  private userIdentifier: string; // User identifier/token;
+  userName = '';
   message = '';
-  messages: { sender: string, content: string }[] = [];
+  messages: { sender: string, content: string, userId: string, userName: string }[] = [];
 
   constructor(private http: HttpClient) {
     // Generate a random user identifier/token
     this.userIdentifier = this.generateUserIdentifier();
+    this.userName = this.userName
 
     // Establish Socket.IO connection with user identifier as a query parameter
     this.socket = io('http://localhost:3000', {
@@ -24,7 +27,7 @@ export class AppComponent {
     });
 
     // Listen for chat messages
-    this.socket.on('chat message', (data: { sender: string, content: string }) => {
+    this.socket.on('chat message', (data: { sender: string, content: string, userId: string, userName: string }) => {
       this.messages.push(data);
     });
   }
@@ -43,10 +46,19 @@ export class AppComponent {
     );
   }
 
+  isUserNameBlank() {
+    if (this.userName == "")
+      return true
+    else
+      return false
+  }
+
   sendMessage() {
     const data = {
       sender: this.userIdentifier, // Include user identifier as the sender
-      content: this.message
+      content: this.message,
+      userId: this.userIdentifier,
+      userName: this.userName
     };
 
     // Send the chat message to the server
@@ -65,7 +77,7 @@ export class AppComponent {
         }
 
         const chatContent = messages
-          .map((message) => `${message._id} => ${message.sender}: ${message.content}`)
+          .map((message) => `Mongo Object ID: ${message._id}. Message content: ${message.userName}: ${message.content}`)
           .join('\n');
         const element = document.createElement('a');
         const file = new Blob([chatContent], { type: 'text/plain;charset=utf-8' });

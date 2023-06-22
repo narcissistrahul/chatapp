@@ -1,10 +1,14 @@
 <div class="container">
   <h1>Chat App</h1>
+  <div class="userName">
+    <input [(ngModel)]="userName" placeholder="Type your name to enable messaging" />
+  </div>
   <ul class="message-list">
-    <li *ngFor="let msg of messages">{{ msg.sender }}: {{ msg.content }}</li>
+    <li *ngFor="let msg of messages">{{ msg.userName }}: {{ msg.content }}</li>
   </ul>
   <div class="message-input">
-    <input [(ngModel)]="message" placeholder="Type your message..." (keyup.enter)="sendMessage()" />
+    <input [(ngModel)]="message" placeholder="Type your message..." (keyup.enter)="sendMessage()"
+      [disabled]="isUserNameBlank()" />
     <button (click)="sendMessage()">Send</button>
     <button (click)="downloadChatMessages()">Download Chat</button>
   </div>

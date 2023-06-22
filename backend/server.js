@@ -33,6 +33,7 @@ mongoose.connect('mongodb://localhost/chat-app', {
 const messageSchema = new mongoose.Schema({
   sender: String,
   content: String,
+  userName: String,
   timestamp: { type: Date, default: Date.now }
 });
 
@@ -49,7 +50,8 @@ io.on('connection', (socket) => {
     // Save the message to MongoDB
     const message = new Message({
       sender: data.sender,
-      content: data.content
+      content: data.content,
+      userName: data.userName
     });
 
     message.save()
@@ -74,7 +76,7 @@ io.on('connection', (socket) => {
 app.get('/messages', async (req, res) => {
   try {
     // Fetch chat messages from the database
-    const messages = await Message.find({}, 'sender content');
+    const messages = await Message.find({}, 'sender content userName');
      res.json(messages);
   } catch (error) {
     console.error('Error fetching chat messages:', error);
